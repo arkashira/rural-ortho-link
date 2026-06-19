@@ -5,7 +5,7 @@ build-backend = "poetry.masonry.api"
 [tool.poetry]
 name = "rural-ortho-link"
 version = "1.0.0"
-description = "Teleconsultation Feature Development"
+description = ""
 
 [tool.poetry.dependencies]
 python = "^3.8"

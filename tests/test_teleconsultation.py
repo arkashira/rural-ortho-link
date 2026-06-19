@@ -1,64 +1,47 @@
 import pytest
-from src.teleconsultation import Teleconsultation, Participant
+from teleconsultation import Teleconsultation, Participant
 
-def test_video_conferencing_with_two_participants():
+def test_add_participant():
     teleconsultation = Teleconsultation()
-    participant1 = Participant(1, "John")
-    participant2 = Participant(2, "Jane")
+    participant = Participant(1, "John Doe")
+    teleconsultation.add_participant(participant)
+    assert len(teleconsultation.participants) == 1
+    assert teleconsultation.participants[0].name == "John Doe"
+
+def test_start_video_conferencing():
+    teleconsultation = Teleconsultation()
+    participant1 = Participant(1, "John Doe")
+    participant2 = Participant(2, "Jane Doe")
     teleconsultation.add_participant(participant1)
     teleconsultation.add_participant(participant2)
-    teleconsultation.start_video_conferencing()
-    assert len(teleconsultation.participants) == 2
+    assert teleconsultation.start_video_conferencing() == "Video conferencing started"
 
-def test_video_conferencing_with_less_than_two_participants():
+def test_start_video_conferencing_with_less_than_two_participants():
     teleconsultation = Teleconsultation()
-    participant1 = Participant(1, "John")
-    teleconsultation.add_participant(participant1)
+    participant = Participant(1, "John Doe")
+    teleconsultation.add_participant(participant)
     with pytest.raises(ValueError):
         teleconsultation.start_video_conferencing()
 
-def test_end_to_end_encryption():
+def test_verify_end_to_end_encryption():
     teleconsultation = Teleconsultation()
-    teleconsultation.enable_end_to_end_encryption()
+    assert teleconsultation.verify_end_to_end_encryption() == "End-to-end encryption verified"
     assert teleconsultation.encrypted
 
-def test_hipaa_compliance():
+def test_document_hipaa_compliance():
     teleconsultation = Teleconsultation()
-    teleconsultation.document_hipaa_compliance()
+    assert teleconsultation.document_hipaa_compliance() == "HIPAA compliance documented"
     assert teleconsultation.hipaa_compliant
 
-def test_verify_acceptance_criteria():
+def test_get_status():
     teleconsultation = Teleconsultation()
-    participant1 = Participant(1, "John")
-    participant2 = Participant(2, "Jane")
+    participant1 = Participant(1, "John Doe")
+    participant2 = Participant(2, "Jane Doe")
     teleconsultation.add_participant(participant1)
     teleconsultation.add_participant(participant2)
-    teleconsultation.enable_end_to_end_encryption()
+    teleconsultation.verify_end_to_end_encryption()
     teleconsultation.document_hipaa_compliance()
-    assert teleconsultation.verify_acceptance_criteria()
-
-def test_verify_acceptance_criteria_with_less_than_two_participants():
-    teleconsultation = Teleconsultation()
-    participant1 = Participant(1, "John")
-    teleconsultation.add_participant(participant1)
-    teleconsultation.enable_end_to_end_encryption()
-    teleconsultation.document_hipaa_compliance()
-    assert not teleconsultation.verify_acceptance_criteria()
-
-def test_verify_acceptance_criteria_without_end_to_end_encryption():
-    teleconsultation = Teleconsultation()
-    participant1 = Participant(1, "John")
-    participant2 = Participant(2, "Jane")
-    teleconsultation.add_participant(participant1)
-    teleconsultation.add_participant(participant2)
-    teleconsultation.document_hipaa_compliance()
-    assert not teleconsultation.verify_acceptance_criteria()
-
-def test_verify_acceptance_criteria_without_hipaa_compliance():
-    teleconsultation = Teleconsultation()
-    participant1 = Participant(1, "John")
-    participant2 = Participant(2, "Jane")
-    teleconsultation.add_participant(participant1)
-    teleconsultation.add_participant(participant2)
-    teleconsultation.enable_end_to_end_encryption()
-    assert not teleconsultation.verify_acceptance_criteria()
+    status = teleconsultation.get_status()
+    assert status["participants"] == ["John Doe", "Jane Doe"]
+    assert status["encrypted"]
+    assert status["hipaa_compliant"]

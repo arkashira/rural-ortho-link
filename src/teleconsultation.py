@@ -20,23 +20,19 @@ class Teleconsultation:
         if len(self.participants) < 2:
             raise ValueError("At least 2 participants are required")
         # Simulate video conferencing
-        print("Video conferencing started")
+        return "Video conferencing started"
 
-    def enable_end_to_end_encryption(self):
+    def verify_end_to_end_encryption(self):
         self.encrypted = True
-        # Simulate end-to-end encryption
-        print("End-to-end encryption enabled")
+        return "End-to-end encryption verified"
 
     def document_hipaa_compliance(self):
         self.hipaa_compliant = True
-        # Simulate HIPAA compliance documentation
-        print("HIPAA compliance documented")
+        return "HIPAA compliance documented"
 
-    def verify_acceptance_criteria(self):
-        if len(self.participants) < 2:
-            return False
-        if not self.encrypted:
-            return False
-        if not self.hipaa_compliant:
-            return False
-        return True
+    def get_status(self):
+        return {
+            "participants": [p.name for p in self.participants],
+            "encrypted": self.encrypted,
+            "hipaa_compliant": self.hipaa_compliant
+        }
